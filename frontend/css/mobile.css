@@ -1,0 +1,24 @@
+/* Mobile-ish */
+@media (max-width: 50rem) {
+	body {
+		max-height: unset;
+	}
+
+	main {
+		justify-content: space-evenly;
+	}
+
+	#time-card-container {
+		position: static;
+	}
+
+	#status-container {
+		flex-grow: 1;
+		top: 50vh;
+		left: 50vw;
+	}
+
+	#log-container {
+		display: none;
+	}
+}

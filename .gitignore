@@ -1,0 +1,6 @@
+.env
+*.js
+*.min.*
+node_modules/**
+!server.js
+/backend/sessions

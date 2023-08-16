@@ -1,0 +1,235 @@
+/* Change Status */
+#change-status {
+	background-color: var(--first-level-background-color);
+	border-radius: .8rem;
+	border: none;
+	color: var(--font-color);
+	cursor: pointer;
+	margin: 1.2em 4em;
+	outline: none;
+	padding: 0.6em 2em;
+	position: relative;
+	touch-action: manipulation;
+	user-select: none;
+	-webkit-user-select: none;
+	z-index: -1000;
+}
+
+#change-status:hover::after {
+	opacity: 50%;
+}
+
+#change-status::before {
+	content: "";
+	background: linear-gradient(45deg,
+			#ff0000,
+			#ff7300,
+			#fffb00,
+			#48ff00,
+			#00ffd5,
+			#002bff,
+			#7a00ff,
+			#ff00c8,
+			#ff0000);
+	position: absolute;
+	top: -2px;
+	left: -2px;
+	background-size: 400%;
+	z-index: -1;
+	filter: blur(.3rem);
+	-webkit-filter: blur(.3rem);
+	width: calc(100% + .3rem);
+	height: calc(100% + .3rem);
+	animation: glowing-change-status 20s linear infinite;
+	transition: opacity 0.3s ease-in-out;
+	border-radius: .8rem;
+}
+
+@keyframes glowing-change-status {
+	0% {
+		background-position: 0 0;
+	}
+
+	100% {
+		background-position: 400% 0;
+	}
+}
+
+#change-status::after {
+	z-index: -1;
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: var(--first-level-background-color);
+	left: 0;
+	top: 0;
+	border-radius: 10px;
+	transition-duration: var(--default-transition);
+}
+
+/* End of Change Status */
+
+/* Main Menu */
+:root {
+	--middle-menu-bar-fade: 0ms;
+}
+
+#main-menu-button {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 3.125rem;
+	width: 3.125rem;
+	padding: 0.625rem;
+	cursor: pointer;
+	overflow: hidden;
+	z-index: 1001;
+	transition-duration: var(--main-menu-button-transition);
+}
+
+#main-menu-button>span {
+	width: 100%;
+	height: 0.1875rem;
+	background-color: var(--font-color);
+	transition-duration: var(--default-transition);
+}
+
+nav #main-menu-button:hover>span,
+nav #main-menu-button.activated:hover>span {
+	fill: var(--accent-color);
+	background-color: var(--accent-color);
+	cursor: pointer;
+}
+
+#main-menu-button.activated>span {
+	transition-duration: var(--default-transition);
+}
+
+@keyframes activate-top-spin {
+	0% {
+		transform: translateY(0rem) rotate(0deg);
+	}
+
+	20% {
+		transform: translateY(.75rem) rotate(45deg);
+	}
+
+	100% {
+		transform: translateY(.75rem) rotate(-135deg);
+	}
+}
+
+@keyframes activate-middle-fade {
+	0% {
+		opacity: 100%;
+	}
+
+	20% {
+		opacity: 100%;
+	}
+
+	100% {
+		opacity: 0%;
+	}
+}
+
+@keyframes activate-bottom-spin {
+	0% {
+		transform: translateY(0rem) rotate(0deg);
+	}
+
+	20% {
+		transform: translateY(-0.9375rem) rotate(-45deg);
+	}
+
+	100% {
+		transform: translateY(-0.9375rem) rotate(135deg);
+	}
+}
+
+#main-menu-button.activated>span:nth-child(1),
+#main-menu-button>span:nth-child(1),
+#main-menu-button.activated>span:nth-child(3),
+#main-menu-button>span:nth-child(3) {
+	animation-duration: var(--main-menu-button-transition);
+}
+
+#main-menu-button.activated>span:nth-child(1) {
+	animation-name: activate-top-spin;
+	transform: translateY(.75rem) rotate(45deg);
+}
+
+#main-menu-button.activated>span:nth-child(2) {
+	animation-name: activate-middle-fade;
+	opacity: 0%;
+	animation-duration: var(--middle-menu-bar-fade);
+}
+
+#main-menu-button.activated>span:nth-child(3) {
+	animation-name: activate-bottom-spin;
+	transform: translateY(-0.9375rem) rotate(-45deg);
+}
+
+@keyframes deactivated-top-spin {
+	0% {
+		transform: translateY(.75rem) rotate(-135deg);
+	}
+
+	75% {
+		transform: translateY(.75rem) rotate(45deg);
+	}
+
+	100% {
+		transform: translateY(0rem) rotate(0deg);
+	}
+
+}
+
+@keyframes deactivated-middle-fade {
+	0% {
+		opacity: 0%;
+	}
+
+	75% {
+		opacity: 0%;
+	}
+
+	100% {
+		opacity: 100%;
+	}
+
+}
+
+@keyframes deactivated-bottom-spin {
+	0% {
+		transform: translateY(-0.9375rem) rotate(135deg);
+	}
+
+	75% {
+		transform: translateY(-0.9375rem) rotate(-45deg);
+	}
+
+	100% {
+		transform: translateY(0rem) rotate(0deg);
+	}
+}
+
+#main-menu-button>span:nth-child(1) {
+	animation-name: deactivated-top-spin;
+	transform: translateY(0rem) rotate(0deg);
+}
+
+#main-menu-button>span:nth-child(2) {
+	animation-name: deactivated-middle-fade;
+	animation-duration: var(--main-menu-button-transition);
+	opacity: 100%;
+}
+
+#main-menu-button>span:nth-child(3) {
+	animation-name: deactivated-bottom-spin;
+	transform: translateY(0rem) rotate(0deg);
+}
+
+/* End of Main Menu */
