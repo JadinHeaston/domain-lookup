@@ -8,22 +8,11 @@ declare interface environmentHandle {
     user_agent: string,
 }
 
-declare interface scrapedData {
-    status?: string,
-    time?: string,
-    payPeriodInfo?: string,
-    ESSTimeData?: ESSTimeData,
-    timePeriod?: TimePeriodData
-}
 
 declare interface ESSTimeData {
     label: Array<string>
     availableTime: Array<string>,
     earnedTime: Array<string>,
-}
-
-declare interface TimePeriodData {
-
 }
 
 declare interface sessionHandle {
@@ -33,8 +22,6 @@ declare interface sessionHandle {
     username: string,
     password: string,
     payPeriodInfo: string,
-
-
     //Session stuff.
     save(),
 }

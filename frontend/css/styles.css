@@ -154,6 +154,7 @@ nav #main-menu {
 	overflow: hidden;
 	transition: all var(--default-transition);
 	color: var(--font-color);
+	pointer-events: none;
 }
 
 nav #main-menu.visible {
@@ -162,6 +163,7 @@ nav #main-menu.visible {
 	transition: all var(--default-transition), z-index 0ms;
 	opacity: 1;
 	background-color: var(--first-level-background-color);
+	pointer-events: all;
 }
 
 nav #main-menu>ul {
