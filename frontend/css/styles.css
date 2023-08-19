@@ -16,8 +16,8 @@
 
 /* Global Variables */
 :root {
-	color-scheme: light dark;
 	/* Both are supported */
+	color-scheme: light dark;
 
 	--accent-color: #0076be;
 	--default-transition: 350ms;
@@ -70,15 +70,18 @@ body {
 	height: 100vh;
 	max-height: 100vh;
 	max-width: calc(100vw - var(--scrollbar-width));
+	position: relative;
+	z-index: -1;
 }
 
 
 /* Header */
 header {
-	position: absolute;
 	top: 1rem;
 	left: 1rem;
 	width: max-content;
+	position: absolute;
+	z-index: 1000;
 }
 
 header a {
@@ -90,10 +93,14 @@ header svg {
 	display: inline;
 	height: 2.5rem;
 	vertical-align: middle;
-	transition-duration: var(--default-transition);
+	transform-origin: center;
+	animation: staticlogo;
+	animation-duration: var(--default-transition);
+	animation-timing-function: ease-in-out;
+	animation-fill-mode: forwards;
 }
 
-header svg g {
+header svg path {
 	fill: var(--font-color);
 	transition-duration: var(--default-transition);
 }
@@ -115,10 +122,36 @@ header a:hover h1 {
 }
 
 header a:hover>svg,
-header a:hover>svg>g {
+header a:hover>svg>path {
 	cursor: pointer;
-	transform: rotate(45deg) !important;
 	fill: var(--accent-color);
+}
+
+header a:hover>svg {
+	animation: spinlogo;
+	animation-duration: var(--default-transition);
+	animation-timing-function: ease-in-out;
+	animation-fill-mode: both;
+}
+
+@keyframes spinlogo {
+	from {
+		transform: scale(1);
+	}
+
+	to {
+		transform: scale(1.1);
+	}
+}
+
+@keyframes staticlogo {
+	from {
+		transform: scale(1.1);
+	}
+
+	to {
+		transform: scale(1);
+	}
 }
 
 /* End of Header */
@@ -129,7 +162,6 @@ nav {
 	flex-direction: row;
 	justify-content: flex-end;
 	align-items: center;
-	vertical-align: middle;
 	position: fixed;
 	width: 100%;
 }
@@ -167,12 +199,12 @@ nav #main-menu.visible {
 }
 
 nav #main-menu>ul {
-	list-style-type: none;
 	/* Remove bullets */
-	padding: 0;
+	list-style-type: none;
 	/* Remove padding */
-	margin: 0;
+	padding: 0;
 	/* Remove margins */
+	margin: 0;
 	height: 100%;
 	width: 100%;
 	display: flex;
@@ -221,6 +253,11 @@ nav #main-menu>ul>a:hover * {
 	height: 3.125rem;
 }
 
+#theme-toggle:focus,
+#theme-toggle:active {
+	outline: .1rem solid var(--accent-color);
+}
+
 #theme-toggle>.theme-icon {
 	height: 2.5rem;
 }
@@ -252,10 +289,11 @@ main {
 	align-items: center;
 	justify-content: center;
 	height: 100%;
-	z-index: -1000;
+	position: relative;
+	z-index: -1;
 }
 
-#status-container {
+#main-form {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -263,103 +301,35 @@ main {
 	width: fit-content;
 	text-align: center;
 	word-wrap: break-word;
+	position: relative;
+	z-index: -1;
 }
 
-#status-container h2 {
+#main-form h2 {
 	margin: 0;
 }
 
-#status-container>h3 {
-	margin: 0;
-	word-wrap: break-word;
-}
-
-#clock-status {
+#main-header {
 	transition-duration: calc(var(--default-transition) * 3);
 	font-size: 3rem;
+	text-align: center;
 }
 
-#clock-status[data-status='Clocked In'] {
+#main-header[data-status='Clocked In'] {
 	color: #48ff00;
 }
 
-#clock-status[data-status='Clocked Out'] {
+#main-header[data-status='Clocked Out'] {
 	color: #ff0000;
 }
 
-#clock-status[data-status='Updating'] {
+#main-header[data-status='Updating'] {
 	color: darkviolet;
 }
 
-#clock-status[data-status='Unknown'] {
+#main-header[data-status='Unknown'] {
 	color: #fffb00;
 }
-
-
-#time-card-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	flex-wrap: wrap-reverse;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	pointer-events: none;
-	position: absolute;
-	width: 100%;
-	bottom: 17vh;
-}
-
-#time-card-container>.time-card {
-	align-items: center;
-	background-color: var(--first-level-background-color);
-	border-style: solid;
-	border-width: .1rem;
-	display: flex;
-	flex-direction: column;
-	height: 10rem;
-	justify-content: space-between;
-	pointer-events: all;
-	width: 8rem;
-	margin: .3rem;
-	z-index: -1000;
-}
-
-#time-card-container>.time-card>p {
-	background-color: var(--second-level-background-color);
-	margin: 0;
-	padding: 0;
-	padding-bottom: .3rem;
-	padding-top: .3rem;
-	text-align: center;
-	width: 100%;
-}
-
-#time-card-container .time-card-amount,
-#time-card-container .time-card-earned {
-	align-items: center;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	width: 100%;
-}
-
-#time-card-container .time-card-amount {
-	border-bottom-width: 0;
-	border-left-width: 0;
-	border-right-width: 0;
-	border-style: solid;
-	border-top-width: .1rem;
-	height: 100%;
-}
-
-#time-card,
-#time-card-container .time-card-earned {
-	height: 1rem;
-	padding-top: .2rem;
-	padding-bottom: .2rem;
-}
-
 
 #comp-card {
 	box-shadow: 0 0 .5rem 0 #E51400;

@@ -1,21 +1,52 @@
-/* Change Status */
-#change-status {
-	background-color: var(--first-level-background-color);
+/* Main Search */
+
+#main-search {
+	padding: .75rem;
+	font-size: 1rem;
+	border-top-left-radius: 1.5rem;
+	border-bottom-left-radius: 1.5rem;
+	background-color: var(--second-level-background-color);
+	transition-duration: var(--default-transition);
+	color: var(--font-color);
+	text-align: center;
+	opacity: 90%;
+}
+
+#main-search:placeholder-shown::placeholder {
+	color: var(--font-color);
+}
+
+#main-search:focus {
+	opacity: 100%;
+}
+
+
+#main-search-container>input[type="submit"] {
+	font-size: 1rem;
+	padding: .75rem;
+}
+
+
+#main-search-container {
+	background-color: transparent;
 	border-radius: .8rem;
 	border: none;
 	color: var(--font-color);
 	margin: 1.2em 4em;
 	outline: none;
-	padding: 0.6em 2em;
+	/* padding: 0.3em 1em; */
 	position: relative;
+	z-index: -1;
 	/* z-index: -1000; */
 }
 
-#change-status:hover::after {
-	opacity: 50%;
+#main-search-container:hover::before {
+	opacity: 100%;
+	filter: blur(1rem);
+	-webkit-filter: blur(1rem);
 }
 
-#change-status::before {
+#main-search-container::before {
 	content: "";
 	background: linear-gradient(45deg,
 			#ff0000,
@@ -28,20 +59,21 @@
 			#ff00c8,
 			#ff0000);
 	position: absolute;
-	top: -2px;
-	left: -2px;
+	top: -.5rem;
+	left: -.5rem;
 	background-size: 400%;
 	z-index: -1;
-	filter: blur(.3rem);
-	-webkit-filter: blur(.3rem);
-	width: calc(100% + .3rem);
-	height: calc(100% + .3rem);
-	animation: glowing-change-status 20s linear infinite;
+	opacity: 75%;
+	filter: blur(.9rem);
+	-webkit-filter: blur(.9rem);
+	width: calc(100% + 1rem);
+	height: calc(100% + 1rem);
+	animation: glowing-main-search-container 20s linear infinite;
 	transition: opacity 0.3s ease-in-out;
-	border-radius: .8rem;
+	border-radius: 1.5rem;
 }
 
-@keyframes glowing-change-status {
+@keyframes glowing-main-search-container {
 	0% {
 		background-position: 0 0;
 	}
@@ -51,16 +83,16 @@
 	}
 }
 
-#change-status::after {
+#main-search-container::after {
 	z-index: -1;
 	content: "";
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-color: var(--first-level-background-color);
+	background-color: transparent;
 	left: 0;
 	top: 0;
-	border-radius: 10px;
+	border-radius: 1.5rem;
 	transition-duration: var(--default-transition);
 }
 
@@ -83,6 +115,11 @@
 	overflow: hidden;
 	z-index: 1001;
 	transition-duration: var(--main-menu-button-transition);
+}
+
+#main-menu-button:focus,
+#main-menu-button:active {
+	outline: .1rem solid var(--accent-color);
 }
 
 #main-menu-button>span {
