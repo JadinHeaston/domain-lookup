@@ -1,5 +1,6 @@
 const compression = require('compression')
 const express = require('express');
+const session = require('express-session');
 const actions = require('./actions.js');
 const { exit } = require('process');
 
@@ -8,7 +9,11 @@ try {
 	var environmentHandle = {
 		port: process.env.PORT,
 		timezone: process.env.TIMEZONE,
-		user_agent: process.env.USER_AGENT
+		user_agent: process.env.USER_AGENT,
+		mysql_port: process.env.mysql_port,
+		mysql_host: process.env.mysql_host,
+		mysql_username: process.env.mysql_username,
+		mysql_password: process.env.mysql_password
 	}
 } catch (err) {
 	console.log(err);
@@ -17,9 +22,26 @@ try {
 
 const app = express(); //Creating an express application.
 const listening_port = environmentHandle.port; // Port to listen on.
+const sessionExpiration = 1000 * 60 * 60 * 24 * 7 * 4; //One month (in ms)
 
 //Enabling compression
 app.use(compression({ level: 9 }))
+
+//Enabling sessions.
+app.use(session({
+	cookie: {
+		maxAge: sessionExpiration,
+		sameSite: 'strict',
+		secure: false,
+		httpOnly: false,
+	},
+	name: 'domain-query.sid',
+	resave: false, //False helps prevent race conditions.
+	saveUninitialized: true,
+	rolling: true,
+	unset: 'destroy',
+	secret: environmentHandle.session_secret,
+}));
 
 //Setting POST data to be interpreted as JSON.
 app.use(express.json());
@@ -33,12 +55,8 @@ app.get('/', async function (req, res) {
 });
 
 app.get('/retrieve-data', async function (req, res) {
-	if (req.session.credentialsValid !== true) {
-		req.session.functionLock = false;
-		return res.status(401).send('Credential Failure');
-	}
-
 	try {
+		req.session.functionLock = true;
 		var result = await actions.getAllData(req.session, environmentHandle);
 	} catch (error) {
 		console.log('Error: ' + error);
@@ -53,10 +71,6 @@ app.get('/retrieve-data', async function (req, res) {
 		return res.status(500).send('Data Retrieval Failure.');
 	}
 	else {
-		req.session.ESSTimeData = result.ESSTimeData;
-		req.session.clockStatus = result.status;
-		req.session.clockTime = result.time;
-
 		req.session.functionLock = false;
 		return res.status(200).send(result);
 	}
