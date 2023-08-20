@@ -149,9 +149,30 @@ async function implantHTML(html) {
 
 	let HTMLHandle = cheerio.load(html);
 	for (const key in APIInfo) {
-		HTMLHandle('<li><h3><a href="' + APIInfo[key].url + '">' + key + '</a></h3><ul><li><a href="' + APIInfo[key].dns.gui + '">' + APIInfo[key].dns.endpoint + '</a></li><li>IP <a href="' + APIInfo[key].ip.v4 + '">v4</a> | <a href="' + APIInfo[key].ip.v6 + '">v6</a></li></ul></li>').insertAfter('#api-list');
-		// HTMLHandle(cardLabelConversion[iterator] + ' .time-card-amount').text(session.ESSTimeData.availableTime[iterator]);
-
+		HTMLHandle(`
+		<li>
+			<h3>
+				<a href="` + APIInfo[key].url + `">` + key + `</a>
+			</h3>
+			<ul>
+				<li>
+					<form>
+						<label>
+							<a href="` + APIInfo[key].dns.gui + `">Domain:</a>
+							<input href="` + APIInfo[key].dns.endpoint + `" type="text" name="domain-query" placeholder="example.com" title="Input a domain."><input type="submit" value="GO">
+						<label>
+					</form>
+				</li>
+				<li>
+					<form>
+						<label>
+							<a href="">IP:</a>
+							<input href="" type="text" name="domain-query" placeholder="127.0.0.1" title="Input an IP address (v4 or v6)."><input type="submit" value="GO">
+						<label>
+					</form>
+				</li>
+			</ul>
+		</li>`).appendTo('#api-list');
 	}
 
 	return HTMLHandle.html();

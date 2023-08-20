@@ -29,6 +29,28 @@
 	color: var(--font-color);
 }
 
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #2bcab6 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+	width: 1px;
+}
+
+*::-webkit-scrollbar-track {
+	background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: #2bcab6;
+	border-radius: 1px;
+	border: 1px solid #ffffff;
+}
+
 .noTextSelect {
 	/* iOS Safari */
 	-webkit-touch-callout: none;
@@ -70,6 +92,7 @@ body {
 	height: 100vh;
 	max-height: 100vh;
 	max-width: calc(100vw - var(--scrollbar-width));
+	overflow: hidden;
 	position: relative;
 	z-index: -1;
 }
@@ -282,7 +305,7 @@ nav #main-menu>ul>a:hover * {
 
 /* End of NAV */
 
-
+/* Main */
 main {
 	display: flex;
 	flex-direction: column;
@@ -331,13 +354,30 @@ main {
 	color: #fffb00;
 }
 
+/* API List */
+#api-list {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	list-style: none;
+	margin: 0;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0;
+	pointer-events: none;
+	position: absolute;
+	overflow-x: auto;
+	max-width: calc(100% - var(--scrollbar-width));
+	z-index: -1;
+	bottom: 17vh;
+}
 
+#api-list:has(> :nth-child(2)) {
+	justify-content: space-between !important;
+	background-color: green !important;
+}
 
-
-
-
-
-#api-list>.time-card {
+#api-list>li {
 	align-items: center;
 	background-color: var(--first-level-background-color);
 	border-style: solid;
@@ -347,12 +387,19 @@ main {
 	height: 10rem;
 	justify-content: space-between;
 	pointer-events: all;
-	width: 8rem;
+	min-width: max-content;
+	width: fit-content;
 	margin: .3rem;
 	z-index: -1000;
 }
 
-#api-list>.time-card>p {
+#api-list ul,
+#api-list li {
+	list-style: none;
+	padding-inline-start: unset;
+}
+
+#api-list h3 {
 	background-color: var(--second-level-background-color);
 	margin: 0;
 	padding: 0;
@@ -380,81 +427,63 @@ main {
 	height: 100%;
 }
 
-#time-card,
 #api-list .time-card-earned {
 	height: 1rem;
 	padding-top: .2rem;
 	padding-bottom: .2rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#comp-card {
+/* API Cards */
+#api-list>li:nth-child(5n + 1) {
 	box-shadow: 0 0 .5rem 0 #E51400;
 }
 
-#comp-card,
-#comp-card>.time-card-amount {
-	border-color: #E51400;
+#api-list>li:nth-child(5n + 1),
+#api-list>li:nth-child(5n + 1)>h3 {
+	border: .1rem solid #E51400;
 }
 
 
-#fh-card {
+#api-list>li:nth-child(5n + 2) {
 	box-shadow: 0 0 .5rem 0 #FA6800;
 }
 
-#fh-card,
-#fh-card>.time-card-amount {
-	border-color: #FA6800;
+#api-list>li:nth-child(5n + 2),
+#api-list>li:nth-child(5n + 2)>h3 {
+	border: .1rem solid #FA6800;
 }
 
 
-#mili-card {
+#api-list>li:nth-child(5n + 3) {
 	box-shadow: 0 0 .5rem 0 #E3C800;
 }
 
-#mili-card,
-#mili-card>.time-card-amount {
-	border-color: #E3C800;
+#api-list>li:nth-child(5n + 3),
+#api-list>li:nth-child(5n + 3)>h3 {
+	border: .1rem solid #E3C800;
 }
 
 
-#sick-card {
+#api-list>li:nth-child(5n + 4) {
 	box-shadow: 0 0 .5rem 0 #60A917;
 }
 
-#sick-card,
-#sick-card>.time-card-amount {
-	border-color: #60A917;
+#api-list>li:nth-child(5n + 4),
+#api-list>li:nth-child(5n + 4)>h3 {
+	border: .1rem solid #60A917;
 }
 
 
-#vaca-card {
+#api-list>li:nth-child(5n + 5) {
 	box-shadow: 0 0 .5rem 0 #0050EF;
 }
 
-#vaca-card,
-#vaca-card>.time-card-amount {
-	border-color: #0050EF;
+#api-list>li:nth-child(5n + 5),
+#api-list>li:nth-child(5n + 5)>h3 {
+	border: .1rem solid #0050EF;
 }
 
+/* Log */
 #log-container {
 	background-color: var(--first-level-background-color);
 	border-top: .1rem solid var(--accent-color);
