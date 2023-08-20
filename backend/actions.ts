@@ -4,6 +4,15 @@ export async function readIndexHTML(): Promise<string> {
 	return readFileSync('./frontend/index.html').toString();
 }
 
+export async function listAPIs(APIInfo: APIinformation, environment: environmentHandle): Promise<object> {
+	//Remove APIs with no keys.
+	for (const key in APIInfo) {
+		if (APIInfo[key].key.length === 0)
+			delete APIInfo[key];
+	}
+	return APIInfo;
+}
+
 //Accepts a promise, a timeout, and a failure value.
 //If the promise doesn't finish within that time, return the failure value. 
 function promiseWithTimeout<T>(

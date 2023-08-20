@@ -2,12 +2,14 @@ const compression = require('compression')
 const express = require('express');
 const session = require('express-session');
 const actions = require('./actions.js');
+const cheerio = require('cheerio');
 const { exit } = require('process');
 
 //Setting session secret.
 try {
 	var environmentHandle = {
 		port: process.env.PORT,
+		session_secret: process.env.SESSION_SECRET,
 		timezone: process.env.TIMEZONE,
 		user_agent: process.env.USER_AGENT,
 		mysql_port: process.env.mysql_port,
@@ -23,6 +25,49 @@ try {
 const app = express(); //Creating an express application.
 const listening_port = environmentHandle.port; // Port to listen on.
 const sessionExpiration = 1000 * 60 * 60 * 24 * 7 * 4; //One month (in ms)
+
+
+const APIinformation = {
+	"WHOIS-RWS (ARIN)": {
+		"dns": {
+			"gui": "",
+			"endpoint": "https://rdap.verisign.com/com/v1/domain/" //{DOMAIN}
+		},
+		"ip": {
+			"gui": "https://whois.arin.net/ui/",
+			"v4": "https://rdap.arin.net/registry/ip/", //{IPv4}
+			"v6": ""
+		},
+		"key": "N/A",
+		"url": "https://whois.arin.net/ui/"
+	},
+	"urlscan.io": {
+		"dns": {
+			"gui": "https://www.virustotal.com/gui/home/search",
+			"endpoint": "https://www.virustotal.com/api/v3/domains/" //{DOMAIN}
+		},
+		"ip": {
+			"gui": "https://www.virustotal.com/gui/home/search",
+			"v4": "https://www.virustotal.com/api/v3/ip_addresses/", //{IP}
+			"v6": ""
+		},
+		"key": "",
+		"url": "https://urlscan.io/"
+	},
+	"VirusTotal": {
+		"dns": {
+			"gui": "https://www.virustotal.com/gui/home/search",
+			"endpoint": "https://www.virustotal.com/api/v3/domains/" //{DOMAIN}
+		},
+		"ip": {
+			"gui": "https://www.virustotal.com/gui/home/search",
+			"v4": "https://www.virustotal.com/api/v3/ip_addresses/", //{IP}
+			"v6": ""
+		},
+		"key": "N/A",
+		"url": "https://www.virustotal.com/gui/home/search"
+	}
+}
 
 //Enabling compression
 app.use(compression({ level: 9 }))
@@ -48,10 +93,10 @@ app.use(express.json());
 
 app.get('/', async function (req, res) {
 	app.use(express.static('frontend')); //Setting root directory for front-end work.
-	let finalOutput = await actions.readIndexHTML();
+	let finalOutput = implantHTML(await actions.readIndexHTML());
 
 	//Show UI.
-	return res.status(200).send(finalOutput);
+	return res.status(200).send(await finalOutput);
 });
 
 app.get('/retrieve-data', async function (req, res) {
@@ -74,8 +119,43 @@ app.get('/retrieve-data', async function (req, res) {
 		req.session.functionLock = false;
 		return res.status(200).send(result);
 	}
-
 });
+
+
+app.get('/api-list/', async function (req, res) {
+	try {
+		req.session.functionLock = true;
+		var result = await actions.listAPIs(APIinformation, environmentHandle);
+	} catch (error) {
+		console.log('Error: ' + error);
+		req.session.functionLock = false;
+		return res.status(500).send('Data Retrieval Failure.');
+	}
+
+	if (result === false) {
+		//LOSER ALERT.
+		console.log('Data Retrieval Failure.');
+		req.session.functionLock = false;
+		return res.status(500).send('Data Retrieval Failure.');
+	}
+	else {
+		req.session.functionLock = false;
+		return res.status(200).send(result);
+	}
+});
+
+async function implantHTML(html) {
+	let APIInfo = await actions.listAPIs(APIinformation, environmentHandle);
+
+	let HTMLHandle = cheerio.load(html);
+	for (const key in APIInfo) {
+		HTMLHandle('<li><h3><a href="' + APIInfo[key].url + '">' + key + '</a></h3><ul><li><a href="' + APIInfo[key].dns.gui + '">' + APIInfo[key].dns.endpoint + '</a></li><li>IP <a href="' + APIInfo[key].ip.v4 + '">v4</a> | <a href="' + APIInfo[key].ip.v6 + '">v6</a></li></ul></li>').insertAfter('#api-list');
+		// HTMLHandle(cardLabelConversion[iterator] + ' .time-card-amount').text(session.ESSTimeData.availableTime[iterator]);
+
+	}
+
+	return HTMLHandle.html();
+}
 
 var server = app.listen(listening_port, function () {
 	const server_information = server.address();

@@ -331,6 +331,81 @@ main {
 	color: #fffb00;
 }
 
+
+
+
+
+
+
+#api-list>.time-card {
+	align-items: center;
+	background-color: var(--first-level-background-color);
+	border-style: solid;
+	border-width: .1rem;
+	display: flex;
+	flex-direction: column;
+	height: 10rem;
+	justify-content: space-between;
+	pointer-events: all;
+	width: 8rem;
+	margin: .3rem;
+	z-index: -1000;
+}
+
+#api-list>.time-card>p {
+	background-color: var(--second-level-background-color);
+	margin: 0;
+	padding: 0;
+	padding-bottom: .3rem;
+	padding-top: .3rem;
+	text-align: center;
+	width: 100%;
+}
+
+#api-list .time-card-amount,
+#api-list .time-card-earned {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	width: 100%;
+}
+
+#api-list .time-card-amount {
+	border-bottom-width: 0;
+	border-left-width: 0;
+	border-right-width: 0;
+	border-style: solid;
+	border-top-width: .1rem;
+	height: 100%;
+}
+
+#time-card,
+#api-list .time-card-earned {
+	height: 1rem;
+	padding-top: .2rem;
+	padding-bottom: .2rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #comp-card {
 	box-shadow: 0 0 .5rem 0 #E51400;
 }

@@ -9,3 +9,19 @@ declare interface environmentHandle {
 	mysql_username: string,
 	mysql_password: string
 }
+
+declare interface APIinformation {
+	[name: string]: {
+		gui: {
+			gui: string,
+			endpoint: string
+		},
+		ip: {
+			gui: string,
+			v4: string,
+			v6: string
+		},
+		key: string,
+		url: string
+	},
+}
