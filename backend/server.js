@@ -100,8 +100,12 @@ app.get('/', async function (req, res) {
 });
 
 app.get('/retrieve-data', async function (req, res) {
-	try {
+	if (req.session.functionLock === true)
+		return res.status(500).send('Action Failed');
+	else
 		req.session.functionLock = true;
+
+	try {
 		var result = await actions.getAllData(req.session, environmentHandle);
 	} catch (error) {
 		console.log('Error: ' + error);
@@ -123,8 +127,12 @@ app.get('/retrieve-data', async function (req, res) {
 
 
 app.get('/api-list/', async function (req, res) {
-	try {
+	if (req.session.functionLock === true)
+		return res.status(500).send('Action Failed');
+	else
 		req.session.functionLock = true;
+
+	try {
 		var result = await actions.listAPIs(APIinformation, environmentHandle);
 	} catch (error) {
 		console.log('Error: ' + error);
@@ -144,6 +152,19 @@ app.get('/api-list/', async function (req, res) {
 	}
 });
 
+
+app.post('/query/', async function (req, res) {
+	if (req.session.functionLock === true)
+		return res.status(500).send('Action Failed');
+	else
+		req.session.functionLock = true;
+
+		
+
+	req.session.functionLock = false;
+	return res.status(200).send();
+});
+
 async function implantHTML(html) {
 	let APIInfo = await actions.listAPIs(APIinformation, environmentHandle);
 
@@ -158,17 +179,15 @@ async function implantHTML(html) {
 				<li>
 					<form>
 						<label>
-							<a href="` + APIInfo[key].dns.gui + `">Domain:</a>
-							<input href="` + APIInfo[key].dns.endpoint + `" type="text" name="domain-query" placeholder="example.com" title="Input a domain."><input type="submit" value="GO">
-						<label>
+							<a href="` + APIInfo[key].dns.gui + `">Domain</a><div><input href="` + APIInfo[key].dns.endpoint + `" type="text" name="domain-query" placeholder="example.com" title="Input a domain."><input type="submit" value="GO"></div>
+						</label>
 					</form>
 				</li>
 				<li>
 					<form>
 						<label>
-							<a href="">IP:</a>
-							<input href="" type="text" name="domain-query" placeholder="127.0.0.1" title="Input an IP address (v4 or v6)."><input type="submit" value="GO">
-						<label>
+							<a href="">IP</a><div><input href="" type="text" name="domain-query" placeholder="127.0.0.1" title="Input an IP address (v4 or v6)."><input type="submit" value="GO"></div>
+						</label>
 					</form>
 				</li>
 			</ul>

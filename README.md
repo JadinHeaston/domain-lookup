@@ -19,9 +19,9 @@ Most values are left empty and are **required** before deployment.
 
 ## APIs
 
-| Name | Description |
-| ---- | ----------- |
-|      |             |
+| Name       | Description                                                                       |
+| ---------- | --------------------------------------------------------------------------------- |
+| /api-list/ | Shows backend API information. The same function is used to create the API cards. |
 
 ## Installation
 

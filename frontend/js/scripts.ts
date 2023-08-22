@@ -16,6 +16,7 @@ var functionLock: FunctionLock =
 	getStatus: false,
 	logout: false,
 	refreshData: false,
+	mainSearchSubmission: false,
 }
 
 document.addEventListener('DOMContentLoaded', async function (event) {
@@ -26,8 +27,9 @@ document.addEventListener('DOMContentLoaded', async function (event) {
 async function initializeListeners(): Promise<void> {
 	document.getElementById('change-status')?.addEventListener('click', changeStatus, { passive: true });
 	document.getElementById('get-status')?.addEventListener('click', refreshData, { passive: true });
-	document.getElementById('main-menu-button')?.addEventListener('click', changeMainMenuState, { passive: true });
-	document.getElementById('theme-toggle')?.addEventListener('click', flipColorScheme, { passive: true });
+	document.getElementById('main-menu-button').addEventListener('click', changeMainMenuState, { passive: true });
+	document.getElementById('theme-toggle').addEventListener('click', flipColorScheme, { passive: true });
+	document.getElementById('main-form').addEventListener('submit', mainSearchSubmission, { passive: false });
 }
 
 async function refreshData(): Promise<void> {
@@ -66,8 +68,37 @@ async function refreshData(): Promise<void> {
 	logMessage('Data refreshed! (' + time + 'ms)', logID);
 }
 
-async function updateUIStatic(condition: string = '') {
+async function mainSearchSubmission(event: Event): Promise<boolean> {
+	event.preventDefault();
+	event.stopImmediatePropagation();
+	if (functionLock.mainSearchSubmission === true) //Function lock to prevent running the same function multiple times. 
+		return;
+	functionLock.mainSearchSubmission = true;
+	let startTimer = window.performance.now();
 
+	//Incrementing logID.
+	let logID = logIDCounter;
+	++logIDCounter;
+
+	console.log();
+	updateUIStatic('mainSearchSubmission');
+	logMessage('Main query initiated...', logID);
+
+	//Collecting array of what APIs are enabled:
+	getEnabledAPIs();
+
+	functionLock.mainSearchSubmission = false; //Unlocking function.
+
+	let time = window.performance.now() - startTimer;
+	logMessage('Data refreshed! (' + time + 'ms)', logID);
+	return false;
+}
+
+async function getEnabledAPIs() {
+
+}
+
+async function updateUIStatic(condition: string = '') {
 	if (condition === 'Authenticated') {
 		//Forcefully closing login menu.
 		forceLoginMenuState = false;
