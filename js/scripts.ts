@@ -13,8 +13,6 @@ var functionLock: FunctionLock =
 {
 	authenticate: false,
 	changeStatus: false,
-	getStatus: false,
-	logout: false,
 	refreshData: false,
 	mainSearchSubmission: false,
 }
@@ -26,46 +24,9 @@ document.addEventListener('DOMContentLoaded', async function (event) {
 
 async function initializeListeners(): Promise<void> {
 	document.getElementById('change-status')?.addEventListener('click', changeStatus, { passive: true });
-	document.getElementById('get-status')?.addEventListener('click', refreshData, { passive: true });
 	document.getElementById('main-menu-button').addEventListener('click', changeMainMenuState, { passive: true });
 	document.getElementById('theme-toggle').addEventListener('click', flipColorScheme, { passive: true });
 	document.getElementById('main-form').addEventListener('submit', mainSearchSubmission, { passive: false });
-}
-
-async function refreshData(): Promise<void> {
-	if (functionLock.refreshData === true) //Function lock to prevent running the same function multiple times. 
-		return;
-	functionLock.refreshData = true;
-	let startTimer = window.performance.now();
-
-	//Incrementing logID.
-	let logID = logIDCounter;
-	++logIDCounter;
-
-	updateUIStatic('Refresh');
-	logMessage('Refreshing data...', logID);
-
-	let response = await fetch('/retrieve-data', {
-		method: 'get'
-	});
-	functionLock.refreshData = false; //Unlocking function.
-
-	if (response.status === 401) {
-		updateUIStatic('Unauthorized');
-		logMessage('Unauthorized.', logID);
-		return;
-	}
-	else if (response.status !== 200) {
-		logMessage('Failed to initialize. Please try again.', logID);
-		return;
-	}
-
-	updateUI(JSON.parse(await response.text())); //Saving json response.
-	updateUIStatic();
-
-	let time = window.performance.now() - startTimer;
-
-	logMessage('Data refreshed! (' + time + 'ms)', logID);
 }
 
 async function mainSearchSubmission(event: Event): Promise<boolean> {
@@ -74,7 +35,6 @@ async function mainSearchSubmission(event: Event): Promise<boolean> {
 	if (functionLock.mainSearchSubmission === true) //Function lock to prevent running the same function multiple times. 
 		return;
 	functionLock.mainSearchSubmission = true;
-	let startTimer = window.performance.now();
 
 	//Incrementing logID.
 	let logID = logIDCounter;
@@ -109,8 +69,7 @@ async function mainSearchSubmission(event: Event): Promise<boolean> {
 
 	functionLock.mainSearchSubmission = false; //Unlocking function.
 
-	let time = window.performance.now() - startTimer;
-	logMessage('Data refreshed! (' + time + 'ms)', logID);
+	logMessage('Data refreshed!', logID);
 	return false;
 }
 

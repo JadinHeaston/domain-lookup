@@ -1,7 +1,7 @@
 const compression = require('compression')
 const express = require('express');
 const session = require('express-session');
-const actions = require('./actions.js');
+const actions = require('./backend/actions.js');
 const cheerio = require('cheerio');
 const { exit } = require('process');
 

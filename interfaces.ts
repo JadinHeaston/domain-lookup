@@ -1,15 +1,5 @@
 // @ts-nocheck
 
-declare interface environmentHandle {
-	port: string,
-	session_secret: string,
-	timezone: string,
-	mysql_host: string,
-	mysql_port: int,
-	mysql_username: string,
-	mysql_password: string
-}
-
 declare interface APIinformation {
 	[name: string]: {
 		gui: {
@@ -24,4 +14,11 @@ declare interface APIinformation {
 		key: string,
 		url: string
 	},
+}
+
+declare interface response {
+    status: string,
+    time: string,
+    payPeriodInfo: string,
+    ESSTimeData: ESSTimeData,
 }
