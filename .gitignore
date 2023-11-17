@@ -1,6 +1,4 @@
 .env
 *.js
 *.min.*
-node_modules/**
-!server.js
-/backend/sessions
+/includes/config.php

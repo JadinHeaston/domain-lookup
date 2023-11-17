@@ -26,7 +26,7 @@ async function initializeListeners(): Promise<void> {
 	document.getElementById('change-status')?.addEventListener('click', changeStatus, { passive: true });
 	document.getElementById('main-menu-button').addEventListener('click', changeMainMenuState, { passive: true });
 	document.getElementById('theme-toggle').addEventListener('click', flipColorScheme, { passive: true });
-	document.getElementById('main-form').addEventListener('submit', mainSearchSubmission, { passive: false });
+	// document.getElementById('main-form').addEventListener('submit', mainSearchSubmission, { passive: false });
 }
 
 async function mainSearchSubmission(event: Event): Promise<boolean> {
