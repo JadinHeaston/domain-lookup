@@ -80,22 +80,38 @@ async function mainSearchSubmission(event: Event): Promise<boolean> {
 	let logID = logIDCounter;
 	++logIDCounter;
 
-	console.log();
 	updateUIStatic('mainSearchSubmission');
 	logMessage('Main query initiated...', logID);
 
-	//Collecting array of what APIs are enabled:
-	getEnabledAPIs();
+
+	let response = await fetch('/query?' + new URLSearchParams({
+		// type: event.target
+	}), {
+		method: 'get'
+	});
+	functionLock.changeStatus = false; //Unlocking function.
+
+	if (response.status !== 200) {
+		document.getElementById('clock-status')!.innerText = 'Server Failure';
+		document.getElementById('clock-status')!.setAttribute('data-status', 'Failure')
+		document.getElementById("current-time")!.innerHTML = 'Failure';
+		logMessage('Server failure. Please try again.', logID);
+
+		return;
+	}
+
+	let responseData = JSON.parse(await response.text());
+
+	document.getElementById('clock-status')!.innerText = responseData.status;
+	document.getElementById('clock-status')!.setAttribute('data-status', responseData.status)
+	document.getElementById("current-time")!.innerHTML = responseData.time;
+
 
 	functionLock.mainSearchSubmission = false; //Unlocking function.
 
 	let time = window.performance.now() - startTimer;
 	logMessage('Data refreshed! (' + time + 'ms)', logID);
 	return false;
-}
-
-async function getEnabledAPIs() {
-
 }
 
 async function updateUIStatic(condition: string = '') {

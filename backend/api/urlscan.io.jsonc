@@ -1,0 +1,15 @@
+{
+	"urlscan.io": {
+		"dns": {
+			"gui": "https://www.virustotal.com/gui/home/search",
+			"endpoint": "https://www.virustotal.com/api/v3/domains/" //{DOMAIN}
+		},
+		"ip": {
+			"gui": "https://www.virustotal.com/gui/home/search",
+			"v4": "https://www.virustotal.com/api/v3/ip_addresses/", //{IP}
+			"v6": ""
+		},
+		"key": "",
+		"url": "https://urlscan.io/"
+	}
+}

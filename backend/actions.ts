@@ -4,13 +4,16 @@ export async function readIndexHTML(): Promise<string> {
 	return readFileSync('./frontend/index.html').toString();
 }
 
-export async function listAPIs(APIInfo: APIinformation, environment: environmentHandle): Promise<object> {
+export async function listAPIs(APIInfo: Array<APIinformation>, environment: environmentHandle): Promise<object> {
+	var APIInfoCopy = JSON.parse(JSON.stringify(APIInfo)) as Array<APIinformation>;
 	//Remove APIs with no keys.
-	for (const key in APIInfo) {
-		if (APIInfo[key].key.length === 0)
-			delete APIInfo[key];
-	}
-	return APIInfo;
+	APIInfoCopy.forEach((api, index, array) => {
+		if (api[Object.keys(api)[0]].key === "")
+			delete array[index];
+	});
+	return APIInfoCopy.filter(function (el) {
+		return el != null;
+	});;
 }
 
 //Accepts a promise, a timeout, and a failure value.

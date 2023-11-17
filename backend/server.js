@@ -26,48 +26,23 @@ const app = express(); //Creating an express application.
 const listening_port = environmentHandle.port; // Port to listen on.
 const sessionExpiration = 1000 * 60 * 60 * 24 * 7 * 4; //One month (in ms)
 
+const fs = require('fs');
+const path = require('path')
+const {
+	parse,
+	stringify,
+	assign
+} = require('comment-json')
+const API_PATH = './backend/api/';
 
-const APIinformation = {
-	"WHOIS-RWS (ARIN)": {
-		"dns": {
-			"gui": "",
-			"endpoint": "https://rdap.verisign.com/com/v1/domain/" //{DOMAIN}
-		},
-		"ip": {
-			"gui": "https://whois.arin.net/ui/",
-			"v4": "https://rdap.arin.net/registry/ip/", //{IPv4}
-			"v6": ""
-		},
-		"key": "N/A",
-		"url": "https://whois.arin.net/ui/"
-	},
-	"urlscan.io": {
-		"dns": {
-			"gui": "https://www.virustotal.com/gui/home/search",
-			"endpoint": "https://www.virustotal.com/api/v3/domains/" //{DOMAIN}
-		},
-		"ip": {
-			"gui": "https://www.virustotal.com/gui/home/search",
-			"v4": "https://www.virustotal.com/api/v3/ip_addresses/", //{IP}
-			"v6": ""
-		},
-		"key": "",
-		"url": "https://urlscan.io/"
-	},
-	"VirusTotal": {
-		"dns": {
-			"gui": "https://www.virustotal.com/gui/home/search",
-			"endpoint": "https://www.virustotal.com/api/v3/domains/" //{DOMAIN}
-		},
-		"ip": {
-			"gui": "https://www.virustotal.com/gui/home/search",
-			"v4": "https://www.virustotal.com/api/v3/ip_addresses/", //{IP}
-			"v6": ""
-		},
-		"key": "N/A",
-		"url": "https://www.virustotal.com/gui/home/search"
-	}
-}
+const jsonsInDir = fs.readdirSync(API_PATH).filter(file => path.extname(file) === '.jsonc');
+const APIinformation = [];
+jsonsInDir.forEach(file => {
+	let fileData = fs.readFileSync(path.join(API_PATH, file));
+	let json = parse(fileData.toString());
+	APIinformation.push(json);
+});
+
 
 //Enabling compression
 app.use(compression({ level: 9 }))
@@ -153,13 +128,17 @@ app.get('/api-list/', async function (req, res) {
 });
 
 
-app.post('/query/', async function (req, res) {
+app.get('/query/', async function (req, res) {
 	if (req.session.functionLock === true)
 		return res.status(500).send('Action Failed');
+	else if (!req.params)
+		return res.status(200).send("No parameters.");
+	else if (!req.params.type || req.params.type === "")
+		return res.status(200).send("No query type.");
 	else
 		req.session.functionLock = true;
 
-		
+
 
 	req.session.functionLock = false;
 	return res.status(200).send();
@@ -168,18 +147,19 @@ app.post('/query/', async function (req, res) {
 async function implantHTML(html) {
 	let APIInfo = await actions.listAPIs(APIinformation, environmentHandle);
 
+	console.log(APIInfo);
 	let HTMLHandle = cheerio.load(html);
-	for (const key in APIInfo) {
+	APIInfo.forEach((api, index, array) => {
 		HTMLHandle(`
 		<li>
 			<h3>
-				<a href="` + APIInfo[key].url + `">` + key + `</a>
+				<a href="` + api[[Object.keys(api)[0]]].url + `">` + [Object.keys(api)[0]] + `</a>
 			</h3>
 			<ul>
 				<li>
 					<form>
 						<label>
-							<a href="` + APIInfo[key].dns.gui + `">Domain</a><div><input href="` + APIInfo[key].dns.endpoint + `" type="text" name="domain-query" placeholder="example.com" title="Input a domain."><input type="submit" value="GO"></div>
+							<a href="` + api[[Object.keys(api)[0]]].dns.gui + `">Domain</a><div><input href="` + api[[Object.keys(api)[0]]].dns.endpoint + `" type="text" name="domain-query" placeholder="example.com" title="Input a domain."><input type="submit" value="GO"></div>
 						</label>
 					</form>
 				</li>
@@ -192,7 +172,7 @@ async function implantHTML(html) {
 				</li>
 			</ul>
 		</li>`).appendTo('#api-list');
-	}
+	});
 
 	return HTMLHandle.html();
 }

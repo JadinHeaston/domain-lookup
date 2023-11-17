@@ -1,0 +1,15 @@
+{
+	"WHOIS-RWS (ARIN)": {
+		"dns": {
+			"gui": "",
+			"endpoint": "https://rdap.verisign.com/com/v1/domain/" //{DOMAIN}
+		},
+		"ip": {
+			"gui": "https://whois.arin.net/ui/",
+			"v4": "https://rdap.arin.net/registry/ip/", //{IPv4}
+			"v6": ""
+		},
+		"key": "N/A",
+		"url": "https://whois.arin.net/ui/"
+	}
+}
