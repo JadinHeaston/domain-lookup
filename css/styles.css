@@ -51,6 +51,10 @@
 	border: 1px solid #ffffff;
 }
 
+input[type="submit"] {
+	cursor: pointer;
+}
+
 .noTextSelect {
 	/* iOS Safari */
 	-webkit-touch-callout: none;

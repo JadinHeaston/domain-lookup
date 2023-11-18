@@ -23,7 +23,7 @@ function secondsToHumanTime(int $seconds)
 function isHTMX()
 {
 	$headers = getallheaders();
-	if ($headers !== false && isset($headers['Hx-Request']) && boolval($headers['Hx-Request']) === true)
+	if ($headers !== false && isset($headers['HX-Request']) && boolval($headers['HX-Request']) === true)
 		return true;
 	else
 		return false;

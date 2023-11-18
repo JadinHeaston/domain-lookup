@@ -11,7 +11,7 @@ require_once(__DIR__ . '/templates/nav.php');
 
 ?>
 <main>
-	<form id="main-form" method="get" action="/query/" hx-get="/query/main/" hx-target="main" hx-push-url="true">
+	<form id="main-form" method="get" action="query.php" hx-get="query.php" hx-target="main" hx-push-url="true">
 		<h2 class="noTextSelect" id="main-header"><label>Query</label></h2>
 		<div id="main-search-container">
 			<input type="text" id="main-search" name="query" placeholder="example.com" title="Input a domain or IPv4 address." <?php echo INPUT_ATTRIBUTES; ?>><input type="submit" value="GO">
@@ -25,9 +25,10 @@ require_once(__DIR__ . '/templates/nav.php');
 			</h3>
 			<form action="/query/urlscan.io/">
 				<label>
-					<a href="https://urlscan.io/">Search</a>
-					<div><input type="text" name="query" placeholder="example.com" title="Input a domain or IPv4 address." <?php echo INPUT_ATTRIBUTES; ?>><input type="submit" value="GO"></div>
+					Search
+					<input type="text" name="query" placeholder="example.com" title="Input a domain or IPv4 address." <?php echo INPUT_ATTRIBUTES; ?>><input type="submit" value="GO">
 				</label>
+				<div class="sub-search-result"></div>
 			</form>
 		</li>
 		<li>
@@ -36,9 +37,10 @@ require_once(__DIR__ . '/templates/nav.php');
 			</h3>
 			<form action="/query/virus-total/">
 				<label>
-					<a href="` + api[[Object.keys(api)[0]]].dns.gui + `">Search</a>
-					<div><input type="text" name="query" placeholder="example.com" title="Input a domain or IPv4 address." <?php echo INPUT_ATTRIBUTES; ?>><input type="submit" value="GO"></div>
+					Search
+					<input type="text" name="query" placeholder="example.com" title="Input a domain or IPv4 address." <?php echo INPUT_ATTRIBUTES; ?>><input type="submit" value="GO">
 				</label>
+				<div class="sub-search-result"></div>
 			</form>
 		</li>
 		<li>
@@ -47,9 +49,10 @@ require_once(__DIR__ . '/templates/nav.php');
 			</h3>
 			<form action="/query/whois-arin/">
 				<label>
-					<a href="https://whois.arin.net/ui/">Search</a>
-					<div><input type="text" name="domain-query" placeholder="example.com" title="Input a domain or IPv4 address."><input type="submit" value="GO"></div>
+					Search
+					<input type="text" name="query" placeholder="example.com" title="Input a domain or IPv4 address."><input type="submit" value="GO">
 				</label>
+				<div class="sub-search-result"></div>
 			</form>
 		</li>
 	</ul>
